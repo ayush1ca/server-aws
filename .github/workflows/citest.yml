@@ -20,6 +20,6 @@ jobs:
         cache: 'npm'
         # working-directory: /var/www/server-aws
     # - run: cd /var/www/server-aws
-    - run: npm ci
-    - run: npm test
+    - run: sudo npm ci
+    - run: sudo npm test
     - run: pm2 restart backendserver
