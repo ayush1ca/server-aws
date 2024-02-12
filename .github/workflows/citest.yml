@@ -1,0 +1,23 @@
+name: Deploy-React-to-EC2
+
+on:
+  push:
+      branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Deploy to EC2 (SSH)
+      uses: easingthemes/ssh-deploy@v4
+      with:
+        SSH_PRIVATE_KEY: ${{ secrets.EC2_KEYPAIR_PEM }}
+        REMOTE_HOST: "ubuntu@ec2-54-160-243-24.compute-1.amazonaws.com"
+        REMOTE_USER: "ubuntu"
+        SOURCE: "."
+        TARGET: "/var/www/server-aws"
+        ARGS: "-r -o StrictHostKeyChecking=no"  # Add -r option to copy directories recursively
+        POST_DEPLOY: 'sudo systemctl restart nginx'
