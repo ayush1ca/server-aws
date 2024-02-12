@@ -9,26 +9,15 @@ jobs:
     runs-on: self-hosted
     strategy:
       matrix:
-        node-version: [12.x]
+        node-version: [18.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
+    - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-
-    - name: Set working directory
-      run: cd /home/ubuntu/actions-runner/_work/server-aws/server-aws
-
-    - name: Install dependencies
-      run: npm ci
-
-    - name: Run tests
-      run: npm test
-
-    - name: Restart backend server
-      run: pm2 restart backendserver
+    - run: sudo npm i
+    - run: sudo npm test
+    - run: pm2 restart backendserver
